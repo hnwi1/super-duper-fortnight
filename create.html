@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>upload users</title>
+    <link rel="stylesheet" href="./css/index.css" />
+    <link
+      href="https://cdn.boxicons.com/fonts/basic/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.boxicons.com/fonts/brands/boxicons-brands.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="add-to-payroll">
+      <div class="payroll-top">
+        <span class="bx bx-x" id="close-payroll"></span>
+        <img src="./assets/Square_Cash_app_logo.svg.webp" />
+      </div>
+      <h2>Add User</h2>
+      <div>
+        <label for="recieve-image" class="payroll-image">
+          <div class="payroll-image">
+            <img src="./assets/default-dp.png" alt="" id="payroll-image" /></div
+        ></label>
+        <input type="file" id="recieve-image" accept="Image/*" hidden />
+      </div>
+      <div class="payroll-inputs">
+        <input type="text" class="user-name" placeholder="Enter user name" />
+        <input type="text" class="user-tag" placeholder="Enter user cashtag" />
+        <input type="text" class="hnwi-id" placeholder="Enter hnwi-id" />
+        <input type="number" class="user-pin" placeholder="set pin" />
+        <input type="checkbox" value="true" id="is-master" />
+      </div>
+      <button id="add-to-payroll">Add user</button>
+      <footer>&copy;Cash App 2025</footer>
+    </div>
+    <script src="./script/create,.js" type="module"></script>
+  </body>
+</html>

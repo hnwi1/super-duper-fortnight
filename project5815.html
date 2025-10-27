@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THADR</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .security {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgb(235, 235, 235);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+    .creation-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background-color: rgb(235, 235, 235);
+      height: 100vh;
+    }
+    h4 {
+      text-transform: capitalize;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+    .security button {
+      background-color: rgb(136, 227, 0);
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      color: white;
+    }
+    .security input,
+    .creation-page input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+    .security input:focus,
+    .creation-page input:focus {
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
+    .creation-page > div {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .creation-page > div input {
+      width: 100%;
+      margin: 10px;
+      padding: 20px;
+      box-sizing: border-box;
+      font-size: 18px;
+    }
+    .create-profile {
+      background-color: rgb(136, 227, 0);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      width: 100%;
+      padding: 20px 40px;
+      border-radius: 10px;
+      margin: 10px;
+    }
+    .exit {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      position: absolute;
+      top: 20px;
+      left: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  </style>
+  <body>
+    <div class="creation-page">
+      <button class="exit">exit</button>
+      <div>
+        <input type="text" placeholder="Enter your name" id="username" />
+        <input type="text" placeholder="Enter your cashtag" id="tag" />
+        <input type="number" placeholder="Enter balance" id="balance" />
+        <input
+          type="number"
+          placeholder="Create 4 digits pin"
+          id="pin"
+          max-length="4"
+        />
+        <button class="create-profile">Update</button>
+      </div>
+    </div>
+    <script type="module">
+      import { fetchUsers } from "./script/modules/functions.js";
+      const API_KEY =
+        "$2a$10$AL1ZZvl9kra1EIG8aJHskO9NEcTS1H9WPZI3EPV4rxrWyaKRYmT6e";
+      const API_URL = "https://api.jsonbin.io/v3/b/68e6fe61d0ea881f409a63ea";
+      let user = JSON.parse(localStorage.getItem("user"));
+      let access = localStorage.getItem("access-passed");
+      let username = document.getElementById("username");
+      let tag = document.getElementById("tag");
+      let balance = document.getElementById("balance");
+      let pin = document.getElementById("pin");
+      console.log(user);
+      document.addEventListener("DOMContentLoaded", () => {
+        try {
+          if (user) {
+            username.value = user.name;
+            tag.value = user.tag;
+            balance.value = user.balance;
+            pin.value = user.pin;
+          }
+        } catch (erro) {}
+      });
+
+      document.querySelector(".exit").addEventListener("click", () => {
+        document.location = "index.html";
+      });
+      document
+        .querySelector(".create-profile")
+        .addEventListener("click", async () => {
+          const data = [{}];
+
+          // Save properly as JSON string
+          const users = await fetchUsers();
+          let sendingUser;
+          users.forEach((el) => {
+            if (el.tag === user.tag) {
+              el.name = username.value.trim();
+              el.tag = tag.value.trim();
+              el.pin = pin.value.trim();
+              el.balance = balance.value.trim();
+            }
+          });
+
+          localStorage.setItem("user", JSON.stringify(data));
+
+          const res = await fetch(`${API_URL}`, {
+            method: "PUT",
+            headers: {
+              "X-MASTER-KEY": API_KEY,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(users),
+          });
+
+          window.alert("Profile edited");
+          username.value = "";
+          tag.value = "";
+          balance.value = "";
+          pin.value = "";
+          document.location = "index.html";
+        });
+
+      setTimeout(() => {
+        localStorage.removeItem("access-passed");
+      }, 60000);
+    </script>
+  </body>
+</html>
